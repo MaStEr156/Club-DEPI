@@ -19,6 +19,47 @@ namespace MVC_1_Depi.Controllers
             _signInManager = signInManager;
         }
 
+        //Register Functions
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerviewmodel)
+        {
+            if(!ModelState.IsValid) return View(registerviewmodel);
+
+            //Model is valid
+            var userfound = await _userManager.FindByEmailAsync(registerviewmodel.Email);
+            if(userfound != null)
+            {
+                TempData["Error"] = "Email is already used";
+                return View(registerviewmodel);
+            }
+
+            //No user Found with this Email
+            var newUser = new AppUser()
+            {
+                UserName = registerviewmodel.Username,
+                Email = registerviewmodel.Email,
+                PhoneNumber = registerviewmodel.Phone,
+            };
+
+            var newUserResponse = await _userManager.CreateAsync(newUser, registerviewmodel.Password);
+            if (!newUserResponse.Succeeded)
+            {
+                TempData["Error"] = "Failed to Register";
+                return View(registerviewmodel);
+            }
+
+            //if succeeded
+            await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+            return RedirectToAction("Index", "Club");
+
+        }
+
+
         // Login Functions
         public IActionResult Login()
         {

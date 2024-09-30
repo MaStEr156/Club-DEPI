@@ -34,7 +34,7 @@ namespace MVC_1_Depi.Controllers
             return View(club);
         }
 
-
+        [Authorize(Roles ="admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateClubViewModel clubVM)
         {
@@ -65,7 +65,7 @@ namespace MVC_1_Depi.Controllers
             }
         }
 
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var club = await _clubRepo.GetByIdAsync(id);
@@ -83,7 +83,7 @@ namespace MVC_1_Depi.Controllers
             return View(ClubVM);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditClubViewModel clubVM)
         {
