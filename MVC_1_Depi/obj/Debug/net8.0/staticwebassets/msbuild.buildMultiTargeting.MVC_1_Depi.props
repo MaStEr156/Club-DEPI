@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MVC_1_Depi.props" />
+</Project>
